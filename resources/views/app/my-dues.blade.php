@@ -1,0 +1,6 @@
+@extends('layouts.app')
+@section('title','Iuran saya')
+@section('content')
+<div class="welcome"><p>Lihat status pembayaran kas Anda. Pembayaran dilakukan langsung kepada bendahara.</p></div>
+<article class="panel"><div class="activity-list">@forelse($invoices as $invoice)@php($payment=$invoice->payments->first())<div class="report-card" style="gap:15px;align-items:flex-start"><div style="flex:1"><div class="panel-title">{{ \Carbon\Carbon::createFromFormat('Y-m',$invoice->period)->translatedFormat('F Y') }}</div><div class="panel-sub">{{ $invoice->due_on?'Jatuh tempo '.$invoice->due_on->translatedFormat('d M Y'):'Tagihan iuran kelas' }}</div><div class="amount-large" style="font-size:18px;margin-top:8px">Rp {{ number_format($invoice->amount,0,',','.') }}</div></div><div>@if($payment?->status==='verified')<span class="badge">Sudah membayar</span><div class="panel-sub">Dicatat bendahara{{ $payment->paid_at?' · '.$payment->paid_at->translatedFormat('d M Y'):'' }}</div>@else<span class="badge red">Belum membayar</span><div class="panel-sub">Silakan bayar langsung kepada bendahara.</div>@endif</div></div>@empty<div class="empty"><b>Belum ada tagihan untuk Anda</b>Status pembayaran akan tampil setelah bendahara membuat tagihan.</div>@endforelse</div></article>
+@endsection
